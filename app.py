@@ -29,15 +29,17 @@ def create_authorized_user(email, first_name, last_name):
 
 def create_twitter_query(email, twitter_url, request_verb):
     user = User.find_by_email(email)
-    authorized_token = oauth2.Token(user.oauth_token, user.oauth_token_secret)
-    authorized_client = oauth2.Client(consumer, authorized_token)
-    response, content = authorized_client.request(twitter_url, request_verb)
-    if response.status != 200:
-        print('An error has happened. Received this status code {}'.format(response.status))
-    result = json.loads(content.decode('utf-8'))
-    return result
+    if user is not None:
+        authorized_token = oauth2.Token(user.oauth_token, user.oauth_token_secret)
+        authorized_client = oauth2.Client(consumer, authorized_token)
+        response, content = authorized_client.request(twitter_url, request_verb)
+        if response.status != 200:
+            print('An error has happened. Received this status code {}'.format(response.status))
+        result = json.loads(content.decode('utf-8'))
+        return result
+    else:
+        return {'message': "Email address provided doesn't exist. Please register"}
 
 
-result = create_twitter_query('asim.kdr@gmail.com', 'https://api.twitter.com/1.1/search/tweets.json?q=brexit', 'GET')
-for element in result['statuses']:
-    print(element['text'])
+result = create_twitter_query('asim.kdr1@gmail.com', 'https://api.twitter.com/1.1/search/tweets.json?q=brexit', 'GET')
+print(result)
