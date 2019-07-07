@@ -1,7 +1,7 @@
 from database import session_factory
 from sqlalchemy import Column, Integer, String
 from database import Base
-from consumer import consumer
+from twitter_utils import consumer
 import oauth2
 import json
 
